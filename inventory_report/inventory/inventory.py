@@ -1,4 +1,5 @@
 import csv
+import json
 from inventory_report.reports.simple_report import SimpleReport
 from inventory_report.reports.complete_report import CompleteReport
 
@@ -6,8 +7,11 @@ from inventory_report.reports.complete_report import CompleteReport
 class Inventory():
     def import_data(path, report_type):
         with open(path, encoding="utf-8") as file:
-            file_reader = csv.DictReader(file, delimiter=",")
-            data = list(file_reader)
+            if path.endswith(".csv"):
+                file_reader = csv.DictReader(file, delimiter=",")
+                data = list(file_reader)
+            elif path.endswith(".json"):
+                data = json.load(file)
 
         if report_type == "simples":
             result_report = SimpleReport.generate(data)
